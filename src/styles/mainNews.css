@@ -1,0 +1,42 @@
+.carousel-container {
+  display: flex;
+  padding: 20px;
+}
+
+.testimonial-images {
+  width: 100%!important;
+  height: 250px;
+  border-radius: 3px;
+}
+
+.subtitle-container, .report-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.carousel-control-next, .carousel-control-prev {
+  align-items: center;
+  height: 250px!important;
+}
+
+.destaques {
+  color: red;
+  font-weight: 500;
+}
+
+.fav-share {
+  background-color: transparent;
+  border: none;
+  padding: 3px;
+}
+
+.copied {
+  padding: 3px;
+}
+
+.details-btn {
+  color: white;
+  text-decoration: none;
+  padding: 3px;
+}
