@@ -1,9 +1,13 @@
-import Header from '../components/Header';
+import Header from "../components/Header"
+import MainNews from "../components/MainNews"
 
 function Initial() {
   return (
-    <Header />
-  );
+    <>
+      <Header/>
+      <MainNews/>
+    </>
+  )
 }
 
-export default Initial;
+export default Initial
