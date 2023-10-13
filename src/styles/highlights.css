@@ -3,13 +3,13 @@
   padding: 20px;
 }
 
-.testimonial-images {
+.highlight-img {
   width: 100%!important;
   height: 250px;
   border-radius: 3px;
 }
 
-.subtitle-container, .report-info {
+.text-container, .highlight-info {
   display: flex;
   justify-content: space-between;
   padding: 5px 0;
@@ -20,7 +20,7 @@
   height: 250px!important;
 }
 
-.destaques {
+.highlights {
   color: red;
   font-weight: 500;
 }
