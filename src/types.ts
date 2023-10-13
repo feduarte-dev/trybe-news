@@ -12,3 +12,7 @@ export type ReportType = {
   tipo: string,
   titulo: string,
 };
+
+export type CardPropsType = {
+  card: ReportType
+};
