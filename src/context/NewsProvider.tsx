@@ -9,64 +9,81 @@ type NewsProviderProps = {
 
 function NewsProvider({ children }: NewsProviderProps) {
   const [highlightsList, setHighlightsList] = useState<ReportType[]>([]);
-  const [cardsList, setCardsList] = useState<ReportType[]>([])
+  const [cardsList, setCardsList] = useState<ReportType[]>([]);
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { getApi } = useFetch(); 
+  const [visibleCards, setVisibleCards] = useState<number>(3);
+  const { getApi } = useFetch();
 
-const fetchAPI = async (URL: string) => {
-  //Condicional feita para não recarregar os Destaques ao clicar no navbar
-  const result = await getApi(URL)
-  if (URL.includes('qtd=100')) {
-    setHighlightsList(result.slice(0, 4))
-    setCardsList(result.slice(4, -1))
-  } else {
-    setCardsList(result.slice(4, -1))
+  const fetchAPI = async (URL: string) => {
+    //Condicional feita para não recarregar os Destaques ao clicar no navbar
+    const result = await getApi(URL);
+    if (URL.includes('qtd=100')) {
+      setHighlightsList(result.slice(0, 4));
+      setCardsList(result.slice(4, -1));
+    } else {
+      setCardsList(result.slice(4, -1));
+      setVisibleCards(3);
+    }
+    setIsLoading(false);
+  };
+
+  const transformImg = (imgJson: string) => {
+    const jsonObj = JSON.parse(imgJson);
+    const imgURL = jsonObj.image_intro;
+    return `https://agenciadenoticias.ibge.gov.br/${imgURL}`;
+  };
+
+  function transformDate(date: string) {
+    const splitDate = date.split('/');
+    const formattedDate = `${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`;
+    const reportDate = new Date(formattedDate);
+    const todayDate = new Date();
+    const dateRange = Number(todayDate) - Number(reportDate);
+    const result = Math.floor(dateRange / (1000 * 60 * 60 * 24));
+    return result > 1 ? `${result} dias atrás` : `${result} dia atrás`;
   }
-  setIsLoading(false)
-}
 
-const transformImg = (imgJson: string) => {
-  const jsonObj = JSON.parse(imgJson);
-  const imgURL = jsonObj.image_intro;
-  return `https://agenciadenoticias.ibge.gov.br/${imgURL}`;
-};
+  const handleClickCopy = async (link: string) => {
+    await navigator.clipboard.writeText(link);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+  };
 
-function transformDate(date: string) {
-  const splitDate = date.split('/');
-  const formattedDate = `${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`;
-  const reportDate = new Date(formattedDate);
-  const todayDate = new Date();
-  const dateRange = Number(todayDate) - Number(reportDate);
-  const result = Math.floor(dateRange / (1000 * 60 * 60 * 24));
-  return result > 1 ? `${result} dias atrás` : `${result} dia atrás`;
-}
+  const handleNavbarClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
+    switch (target.innerText) {
+      case 'Mais Recentes':
+        return fetchAPI(
+          'https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100'
+        );
+      case 'Releases':
+        return fetchAPI(
+          'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=release'
+        );
+      case 'Notícias':
+        return fetchAPI(
+          'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=noticia'
+        );
+    }
+  };
 
-const handleClickCopy = async (link: string) => {
-  await navigator.clipboard.writeText(link);
-  setIsCopied(true);
-  setTimeout(() => {
-    setIsCopied(false);
-  }, 2000);
-};
+  const loadMoreCards = () => {
+    const newVisibleCards = visibleCards + 3;
+    setVisibleCards(newVisibleCards);
+  };
 
-const handleNavbarClick = (event: React.MouseEvent<HTMLDivElement>) => {
-  const target = event.target as HTMLDivElement;
-  switch (target.innerText) {
-    case 'Mais Recentes':
-      return fetchAPI(
-        'https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100'
-      );
-    case 'Releases':
-      return fetchAPI(
-        'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=release'
-      );
-    case 'Notícias':
-      return fetchAPI(
-        'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=noticia'
-      );
-  }
-};
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      loadMoreCards();
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
 
   const context = {
     highlightsList,
@@ -78,12 +95,12 @@ const handleNavbarClick = (event: React.MouseEvent<HTMLDivElement>) => {
     isLoading,
     cardsList,
     handleNavbarClick,
+    handleScroll,
+    visibleCards,
   };
 
   return (
-    <ContextNews.Provider value={ context }>
-      { children }
-    </ContextNews.Provider>
+    <ContextNews.Provider value={context}>{children}</ContextNews.Provider>
   );
 }
 

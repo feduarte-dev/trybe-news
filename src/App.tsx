@@ -4,7 +4,7 @@ import Initial from './pages/Initial';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={ <Initial /> } />
+      <Route path="/" element={<Initial />} />
     </Routes>
   );
 }

@@ -7,11 +7,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NewsContext from '../context/NewsContext';
 
 function NewsCards() {
-  const { cardsList, fetchAPI, handleNavbarClick} = useContext(NewsContext);
+  const { cardsList, fetchAPI, handleNavbarClick, visibleCards, handleScroll } =
+    useContext(NewsContext);
 
   useEffect(() => {
     fetchAPI('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100');
   }, []);
+
+  useEffect(() => {
+    handleScroll();
+  }, [visibleCards]);
 
   return (
     <>
@@ -35,9 +40,10 @@ function NewsCards() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div className='cardslist-container'>
-        {cardsList.length > 0 &&
-          cardsList.map((card, index) => <Card card={card} key={index} />)}
+      <div className="cardslist-container">
+        {cardsList.slice(0, visibleCards).map((card, index) => (
+          <Card card={card} key={index} />
+        ))}
       </div>
     </>
   );

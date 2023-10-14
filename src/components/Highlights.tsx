@@ -6,12 +6,8 @@ import NewsContext from '../context/NewsContext';
 import Card from './Card';
 
 function Highlights() {
-  const {
-    transformImg,
-    fetchAPI,
-    highlightsList,
-    isLoading,
-  } = useContext(NewsContext);
+  const { transformImg, fetchAPI, highlightsList, isLoading } =
+    useContext(NewsContext);
 
   useEffect(() => {
     fetchAPI('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100');
