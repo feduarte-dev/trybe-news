@@ -4,20 +4,22 @@
 }
 
 .highlight-img {
-  width: 100%!important;
+  width: 100% !important;
   height: 250px;
   border-radius: 3px;
 }
 
-.text-container, .highlight-info {
+.text-container,
+.highlight-info {
   display: flex;
   justify-content: space-between;
   padding: 5px 0;
 }
 
-.carousel-control-next, .carousel-control-prev {
+.carousel-control-next,
+.carousel-control-prev {
   align-items: center;
-  height: 250px!important;
+  height: 250px !important;
 }
 
 .highlights {

@@ -9,6 +9,7 @@
     "dev": "vite --open",
     "lint": "eslint -c .eslintrc.json . --ext .js,.jsx,.ts,.tsx",
     "preview": "vite preview",
+    "deploy": "gh-pages -d build",
     "test": "vitest"
   },
   "dependencies": {
