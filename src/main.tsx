@@ -7,7 +7,7 @@ import NewsProvider from './context/NewsProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as Element).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <NewsProvider>
         <App />
       </NewsProvider>
