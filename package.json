@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "homepage" : "https://feduarte-dev.github.io/trybe-news/",
   "scripts": {
     "build": "tsc && vite build",
     "coverage": "vitest run --coverage",
     "dev": "vite --open",
     "lint": "eslint -c .eslintrc.json . --ext .js,.jsx,.ts,.tsx",
     "preview": "vite preview",
-    "deploy": "gh-pages -d build",
-    "test": "vitest"
+    "test": "vitest",
+    "homepage" : "https://feduarte-dev.github.io/trybe-news/",
+    "deploy": "gh-pages -d build"
+    
   },
   "dependencies": {
     "bootstrap": "^5.3.2",
@@ -19,7 +22,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.15.0",
-    "styled-components": "^6.0.7"
+    "styled-components": "^6.0.7",
+    "homepage" : "https://feduarte-dev.github.io/trybe-news/"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.2",
@@ -37,6 +41,7 @@
     "stylelint-config-standard": "^34.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.3",
+    "homepage" : "https://feduarte-dev.github.io/trybe-news/"
   }
 }
