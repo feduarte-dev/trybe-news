@@ -10,12 +10,18 @@ function NewsCards() {
   const { cardsList, fetchAPI, handleNavbarClick, visibleCards, handleScroll } =
     useContext(NewsContext);
 
+  const getFavorites = JSON.parse(
+    localStorage.getItem('Favorite News') as string
+  );
+
   useEffect(() => {
     fetchAPI('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100');
+    console.log(getFavorites);
   }, []);
 
   useEffect(() => {
     handleScroll();
+    console.log(getFavorites);
   }, [visibleCards]);
 
   return (

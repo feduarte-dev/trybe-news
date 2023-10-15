@@ -1,37 +1,35 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import shareIcon from '../assets/shareIcon.svg';
 import whiteHeart from '../assets/whiteHeartIcon.svg';
-// import blackHeart from '../assets/blackHeartIcon.svg'
+import blackHeart from '../assets/blackHeartIcon.svg'
 import '../styles/newsCards.css';
 import NewsContext from '../context/NewsContext';
-import { CardPropsType } from '../types';
+import { CardPropsType, ReportType } from '../types';
+import { readFavoriteNews, saveFavoriteNews } from '../services/favorites';
 
 function Card({ card }: CardPropsType) {
-  const { handleClickCopy, isCopied, transformDate } = useContext(NewsContext);
-  // const [isFavorite, setIsFavorite] = useState(false)
-  // const [favoriteCards, setFavoriteCards] = useState([])
+  const { handleClickCopy, isCopied, transformDate, setCardsList, isFavoriteTab} = useContext(NewsContext);
+  const [isFavorite, setIsFavorite] = useState(false)
 
-  // const handleClickFavorite = (path: string, id: string) => {
-  //   if (recipeDetailsAPI && !favorites.some((favorite) => favorite.id === id)) {
-  //     const newFavorite = [...favorites, {
-  //       id,
-  //       type: path === 'meals' ? 'meal' : 'drink',
-  //       nationality: path === 'meals' ? recipeDetailsAPI.strArea : '',
-  //       category: recipeDetailsAPI?.strCategory ? recipeDetailsAPI.strCategory : '',
-  //       alcoholicOrNot: path === 'meals' ? '' : recipeDetailsAPI.strAlcoholic,
-  //       name: path === 'meals' ? recipeDetailsAPI.strMeal : recipeDetailsAPI.strDrink,
-  //       image: path === 'meals' ? recipeDetailsAPI.strMealThumb
-  //         : recipeDetailsAPI.strDrinkThumb,
-  //     }];
-  //     setFavorites(newFavorite);
-  //     return localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorite));
-  //   }
-  //   const removeFavorite = favorites.filter((favorite) => favorite.id !== id);
-  //   setFavorites(removeFavorite);
-  //   return localStorage.setItem('favoriteRecipes', JSON.stringify(removeFavorite));
-  // };
+  useEffect(() => {
+    const favoriteNews = readFavoriteNews();
+    setIsFavorite(favoriteNews.some((report) => report.id === card.id));
+  }, [card]);
+
+  const setFavoriteNews = (card: ReportType, favoriteTab: boolean) => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+    const favoriteNews = readFavoriteNews();
+    
+    if (!isFavorite) {
+      saveFavoriteNews([...favoriteNews, card]);
+    } else {
+      saveFavoriteNews(favoriteNews.filter((report: ReportType) => report.id !== card.id));
+    }
+
+    if (isFavoriteTab) setCardsList(JSON.parse(localStorage.getItem('Favorite News') as string));
+  }
 
   return (
     <div>
@@ -49,9 +47,18 @@ function Card({ card }: CardPropsType) {
           >
             <img src={shareIcon} alt="" />
           </button>
-          <button className="fav-share">
-            <img src={ whiteHeart } alt="Heart" />
-          </button>
+
+          <label htmlFor={ card.titulo }>
+        <input
+          type="checkbox"
+          name="favoriteTrack"
+          id={ card.titulo }
+          onChange={ () => setFavoriteNews(card) }
+          checked={ isFavorite }
+        />
+        <img src={ isFavorite? blackHeart: whiteHeart } alt="favorite" />
+      </label>
+
           <Button variant="success">
             <Link to={card.link} className="details-btn">
               Detalhes

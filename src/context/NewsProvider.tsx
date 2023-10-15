@@ -13,6 +13,7 @@ function NewsProvider({ children }: NewsProviderProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [visibleCards, setVisibleCards] = useState<number>(3);
+  const [isFavoriteTab, setIsFavoriteTab] = useState(false);
   const { getApi } = useFetch();
 
   const fetchAPI = async (URL: string) => {
@@ -56,18 +57,30 @@ function NewsProvider({ children }: NewsProviderProps) {
     const target = event.target as HTMLDivElement;
     switch (target.innerText) {
       case 'Mais Recentes':
-        return fetchAPI(
-          'https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100'
-        );
+        fetchAPI('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=100');
+        setIsFavoriteTab(false);
+        break;
       case 'Releases':
-        return fetchAPI(
+        fetchAPI(
           'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=release'
         );
+        setIsFavoriteTab(false);
+        break;
       case 'Notícias':
-        return fetchAPI(
+        fetchAPI(
           'http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=noticia'
         );
+        setIsFavoriteTab(false);
+        break;
+      case 'Favoritos':
+        setCardsList(
+          JSON.parse(localStorage.getItem('Favorite News') as string)
+        );
+        setIsFavoriteTab(true);
+        break;
     }
+    console.log(isFavoriteTab);
+    
   };
 
   const loadMoreCards = () => {
@@ -97,6 +110,8 @@ function NewsProvider({ children }: NewsProviderProps) {
     handleNavbarClick,
     handleScroll,
     visibleCards,
+    setCardsList,
+    isFavoriteTab,
   };
 
   return (
